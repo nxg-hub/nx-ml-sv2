@@ -6,12 +6,14 @@ export default async function handler(req, res) {
   }
 
 
-  const { recipient, messageBody, subject, attachment, senderName, apiKey } = req.body;
+  const { recipient, messageBody, subject, attachment, senderName } = req.body;
 
   // API key validation
-  if (apiKey !== process.env.API_KEY) {
+  const apiKeyHeader = req.headers["x-api-key"];
+  if (apiKeyHeader !== process.env.API_KEY) {
     return res.status(401).json({ error: "Invalid API key" });
   }
+
 
   try {
     const transporter = nodemailer.createTransport({
